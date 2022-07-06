@@ -31,6 +31,7 @@
 
 #define QMK_KEYS_PER_SCAN 4
 #define USB_POLLING_INTERVAL_MS 1
+#define CIRQUE_PINNACLE_SPI_CS_PIN 21
 
 /*
  * Feature disable options
