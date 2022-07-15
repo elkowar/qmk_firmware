@@ -18,7 +18,7 @@
         "device_version": "0.1.0"
     },
     "matrix_pins": {
-        "rows": [ "GP29", "GP28", "GP27", "GP26", "GP0", "GP1", "GP2", "GP3" ],
+        "rows": [ "GP29", "GP28", "GP27", "GP26", "GP3", "GP2", "GP1", "GP0" ],
         "cols": [ "GP4", "GP5", "GP6", "GP7", "GP8", "GP9" ]
     },
     "nothing of this is complete": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
