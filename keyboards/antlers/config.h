@@ -31,11 +31,37 @@
 
 #define QMK_KEYS_PER_SCAN 4
 #define USB_POLLING_INTERVAL_MS 1
-#define CIRQUE_PINNACLE_SPI_CS_PIN 21
 
-#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET // Activates the double-tap behavior
+// enter bootloader mode via double-tapping reset (should be default)
+#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET              // Activates the double-tap behavior
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 300U // Timeout window in ms in which the double tap can occur.
-#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED_MASK 0U // Specify a optional status led which blinks when entering the bootloader
+#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED_MASK 0U  // Specify a optional status led which blinks when entering the bootloader
+
+/*
+ * CIRQUE STUFF
+ */
+
+#define POINTING_DEVICE_ROTATION_270
+
+#define CIRQUE_PINNACLE_ATTENUATION ADC_ATTENUATE_2X // # down to 1X
+#define CIRQUE_PINNACLE_TAPPING_TERM 200
+#define POINTING_DEVICE_TASK_THROTTLE_MS 10 // maybe lower?
+#define CIRQUE_PINNACLE_SPI_CS_PIN GP21
+//#define CIRQUE_PINNACLE_TOUCH_DEBOUNCE default unclear
+
+// define the SPI pinout to match the board
+#define SPI_DRIVER SPID0
+
+#undef SPI_SCK_PIN
+#define SPI_SCK_PIN GP22
+
+#undef SPI_MISO_PIN
+#define SPI_MISO_PIN GP20
+
+#undef SPI_MOSI_PIN
+#define SPI_MOSI_PIN GP23
+
+
 
 /*
  * Feature disable options
