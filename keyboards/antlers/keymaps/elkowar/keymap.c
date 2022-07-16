@@ -16,7 +16,7 @@
 
 #include QMK_KEYBOARD_H
 
-enum layer_names { _BASE = 0, _SYM, _NUM, _FUN };
+enum layer_names { _BASE = 0, _SYM, _NUM, _FUN, _MOUSE };
 
 #define CT(x) LCTL_T((x))
 #define LS(x) LSFT_T((x))
@@ -39,6 +39,14 @@ enum layer_names { _BASE = 0, _SYM, _NUM, _FUN };
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+    /*
+    [_LAYER] = LAYOUT(
+        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
+        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
+        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
+                                         _______,  _______,   _______, _______,        _______,  _______,  _______,  _______ \
+    )
+    */
     [_BASE] = LAYOUT(
         LT_NUMTAB,   KC_Q,     KC_W,     KC_E,     KC_R,      KC_T,                              KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_PLUS, \
         CT(KC_ESC),  HOME_A,   HOME_S,   HOME_D,   HOME_F,    KC_G,                              KC_H,     HOME_J,   HOME_K,   HOME_L,   HOME_SCLN,KC_QUOT, \
@@ -62,6 +70,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  KC_F11,   KC_F12,   _______, \
         _______,     _______,  _______,  _______,  _______,   _______,                           _______,  KC_INS,   KC_PSCR,  KC_SLCK,  KC_PAUSE, _______, \
                                          _______,  _______,   _______, _______,        _______,  _______,  _______,  _______ \
+    ),
+    [_MOUSE] = LAYOUT(
+        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
+        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
+        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
+                                         _______,  KC_BTN3,   KC_BTN2, KC_BTN1,        KC_BTN1,  KC_BTN2,  KC_BTN3,  _______ \
     )
 
 };
+
+void pointing_device_init_user(void) {
+    pointing_device_set_cpi(400);
+}
+
+static uint16_t mouse_timer = 0;
+
+report_mouse_t pointing_device_task_user(report_mouse_t report) {
+    if (report.x != 0 && report.y != 0) {
+        mouse_timer = timer_read();
+        if (!layer_state_is(_MOUSE)) {
+            layer_on(_MOUSE);
+        }
+    } else if (timer_elapsed(mouse_timer) > 650 && layer_state_is(_MOUSE)) {
+        layer_off(_MOUSE);
+    }
+    return report;
+}
+
+
