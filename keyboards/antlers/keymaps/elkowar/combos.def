@@ -1,0 +1,29 @@
+COMB(control_backspace, LCTL(KC_BSPC), HOME_J, HOME_L)
+
+
+//COMB(twohand_underscore, KC_UNDERSCORE)
+//COMB(twohand_colon,      KC_COLON)
+
+COMB(colon,             KC_COLON,      LT_BSSYM, HOME_J)
+COMB(underscore,        KC_UNDERSCORE, LT_BSSYM, HOME_K)
+COMB(exclmark,          KC_EXLM,       LT_BSSYM, HOME_L)
+COMB(qmark,             KC_QUES,       LT_BSSYM, KC_COLON)
+
+COMB(vert_colon,        KC_COLON,      KC_U, HOME_J)
+COMB(vert_underscore,   KC_UNDERSCORE, KC_I, HOME_K)
+COMB(vert_exclmark,     KC_EXLM,       KC_O, HOME_L)
+COMB(vert_qmark,        KC_QUES,       KC_P, KC_COLON)
+
+
+//COMB(ctrl_z,             LC(Z))
+//COMB(ctrl_c,             LC(C))
+//COMB(ctrl_v,             LC(V))
+
+SUBS(DBL_CLN, "::", KC_H, HOME_J)
+SUBS(ARROW, "->", KC_H, KC_U)
+SUBS(thin_arrow, "=>", KC_Y, KC_P)
+
+SUBS(UML_AE, SS_TAP(X_RALT)"\"a", HOME_A, HOME_S, HOME_D)
+SUBS(UML_OE, SS_TAP(X_RALT)"\"o", KC_K,   HOME_L, KC_SCLN)
+SUBS(UML_UE, SS_TAP(X_RALT)"\"u", KC_I,   KC_O,   KC_P)
+SUBS(UML_SS, SS_TAP(X_RALT)"ss",  HOME_S, HOME_D, HOME_F)
