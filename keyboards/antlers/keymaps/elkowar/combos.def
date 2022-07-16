@@ -14,6 +14,8 @@ COMB(vert_underscore,   KC_UNDERSCORE, KC_I, HOME_K)
 COMB(vert_qmark,        KC_QUES,       KC_P, HOME_L)
 COMB(vert_exclmark,     KC_EXLM,       KC_O, KC_SCLN)
 
+COMB(caps_word,         CAPS_WORD,     KC_U, KC_I, KC_O)
+
 
 //COMB(ctrl_z,             LC(Z))
 //COMB(ctrl_c,             LC(C))
