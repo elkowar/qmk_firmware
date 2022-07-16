@@ -17,6 +17,8 @@
 #include QMK_KEYBOARD_H
 #include <math.h>
 
+enum my_keycodes { SNIPE = SAFE_RANGE };
+
 enum layer_names { _BASE = 0, _SYM, _NUM, _FUN, _MOUSE };
 
 #define CT(x) LCTL_T((x))
@@ -36,7 +38,6 @@ enum layer_names { _BASE = 0, _SYM, _NUM, _FUN, _MOUSE };
 #define HOME_SCLN KC_SCLN
 
 #include "g/keymap_combo.h"
-
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -74,37 +75,61 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_MOUSE] = LAYOUT(
         _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
-        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
-        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
-                                         _______,  KC_BTN3,   KC_BTN2, KC_BTN1,        KC_BTN1,  KC_BTN2,  KC_BTN3,  _______ \
+        _______,     _______,  _______,  SNIPE,    _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
+        _______,     _______,  _______,  _______,  _______,   KC_BTN3,                           _______,  _______,  _______,  _______,  _______,  _______, \
+                                         _______,  _______,   KC_BTN2, KC_BTN1,        KC_BTN1,  KC_BTN2,  KC_BTN3,  _______ \
     )
 
 };
+
+#define MOUSE_LAYER_TIMEOUT 650
+#define MOUSE_ROTATION_DEG 30
+
 
 void pointing_device_init_user(void) {
     pointing_device_set_cpi(400);
 }
 
-static uint16_t mouse_timer = 0;
 
-report_mouse_t pointing_device_task_user(report_mouse_t report) {
-    if (report.x != 0 && report.y != 0) {
-        mouse_timer = timer_read();
-        if (!layer_state_is(_MOUSE)) {
-            layer_on(_MOUSE);
-        }
-    } else if (timer_elapsed(mouse_timer) > 650 && layer_state_is(_MOUSE)) {
-        layer_off(_MOUSE);
-    }
-    return report;
-}
-
-// not used rn
 report_mouse_t rotate_mouse_report(report_mouse_t report) {
-    float rotation_deg = 30;
-    float rotation = rotation_deg * 0.017453;
+    float rotation = MOUSE_ROTATION_DEG * 0.017453;
     report.x = report.x * cos(rotation) - report.y * sin(rotation);
     report.y = report.x * sin(rotation) + report.y * cos(rotation);
     return report;
 }
 
+
+
+static uint16_t mouse_layer_timer = 0;
+
+report_mouse_t pointing_device_task_user(report_mouse_t report) {
+    if (report.x != 0 && report.y != 0) {
+        mouse_layer_timer = timer_read();
+        if (!layer_state_is(_MOUSE)) {
+            layer_on(_MOUSE);
+        }
+    } else if (timer_elapsed(mouse_layer_timer) > MOUSE_LAYER_TIMEOUT && layer_state_is(_MOUSE)) {
+        layer_off(_MOUSE);
+    }
+    return rotate_mouse_report(report);
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (keycode == KC_BTN1 || keycode == KC_BTN2 || keycode == KC_BTN3) {
+        mouse_layer_timer = timer_read();
+    } else if (layer_state_is(_MOUSE)) {
+        mouse_layer_timer += MOUSE_LAYER_TIMEOUT;
+        layer_off(_MOUSE);
+    }
+    switch (keycode) {
+        case SNIPE:
+            if (record->event.pressed) {
+                pointing_device_set_cpi(200);
+            } else {
+                pointing_device_set_cpi(400);
+            }
+            return true;
+        default:
+            return true;
+    }
+}

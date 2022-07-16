@@ -6,13 +6,13 @@ COMB(control_backspace, LCTL(KC_BSPC), HOME_J, HOME_L)
 
 COMB(colon,             KC_COLON,      LT_BSSYM, HOME_J)
 COMB(underscore,        KC_UNDERSCORE, LT_BSSYM, HOME_K)
-COMB(exclmark,          KC_EXLM,       LT_BSSYM, HOME_L)
-COMB(qmark,             KC_QUES,       LT_BSSYM, KC_COLON)
+COMB(qmark,             KC_QUES,       LT_BSSYM, HOME_L)
+COMB(exclmark,          KC_EXLM,       LT_BSSYM, KC_SCLN)
 
 COMB(vert_colon,        KC_COLON,      KC_U, HOME_J)
 COMB(vert_underscore,   KC_UNDERSCORE, KC_I, HOME_K)
-COMB(vert_exclmark,     KC_EXLM,       KC_O, HOME_L)
-COMB(vert_qmark,        KC_QUES,       KC_P, KC_COLON)
+COMB(vert_qmark,        KC_QUES,       KC_P, HOME_L)
+COMB(vert_exclmark,     KC_EXLM,       KC_O, KC_SCLN)
 
 
 //COMB(ctrl_z,             LC(Z))
