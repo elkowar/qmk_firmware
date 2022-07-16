@@ -25,9 +25,5 @@
 /*}*/
 
 report_mouse_t pointing_device_task_kb(report_mouse_t report) {
-    float rotation_deg = 30;
-    float rotation = rotation_deg * 0.017453;
-    report.x = report.x * cos(rotation) - report.y * sin(rotation);
-    report.y = report.x * sin(rotation) + report.y * cos(rotation);
     return pointing_device_task_user(report);
 }

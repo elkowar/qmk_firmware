@@ -15,6 +15,7 @@
  */
 
 #include QMK_KEYBOARD_H
+#include <math.h>
 
 enum layer_names { _BASE = 0, _SYM, _NUM, _FUN, _MOUSE };
 
@@ -98,4 +99,12 @@ report_mouse_t pointing_device_task_user(report_mouse_t report) {
     return report;
 }
 
+// not used rn
+report_mouse_t rotate_mouse_report(report_mouse_t report) {
+    float rotation_deg = 30;
+    float rotation = rotation_deg * 0.017453;
+    report.x = report.x * cos(rotation) - report.y * sin(rotation);
+    report.y = report.x * sin(rotation) + report.y * cos(rotation);
+    return report;
+}
 
