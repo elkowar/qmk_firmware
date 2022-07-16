@@ -71,6 +71,17 @@
 
 
 /*
+ * mod tap config
+ */
+
+#define IGNORE_MOD_TAP_INTERRUPT
+#define TAPPING_TERM 160
+//#define PERMISSIVE_HOLD
+#define TAPPING_FORCE_HOLD
+#define BILATERAL_COMBINATIONS 300
+
+
+/*
  * Feature disable options
  *  These options are also useful to firmware size reduction.
  */

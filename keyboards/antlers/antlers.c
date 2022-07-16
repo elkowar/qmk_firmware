@@ -20,9 +20,9 @@
 #    include "print.h"
 #endif
 
-void pointing_device_init_kb(void) {
-    pointing_device_set_cpi(512);
-}
+/*void pointing_device_init_kb(void) {*/
+    /*pointing_device_set_cpi(512);*/
+/*}*/
 
 report_mouse_t pointing_device_task_kb(report_mouse_t report) {
     float rotation_deg = 30;
