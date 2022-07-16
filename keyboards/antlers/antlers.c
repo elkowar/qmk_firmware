@@ -18,3 +18,7 @@
 #ifdef CONSOLE_ENABLE
 #    include "print.h"
 #endif
+
+void pointing_device_init_kb(void) {
+    pointing_device_set_cpi(512);
+}
