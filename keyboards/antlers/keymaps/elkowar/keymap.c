@@ -19,7 +19,7 @@
 
 enum my_keycodes { SNIPE = SAFE_RANGE };
 
-enum layer_names { _BASE = 0, _SYM, _NUM, _FUN, _MOUSE };
+enum layer_names { _BASE = 0, _GAME, _SYM, _NUM, _FUN, _MOUSE };
 
 #define CT(x) LCTL_T((x))
 #define LS(x) LSFT_T((x))
@@ -55,6 +55,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LSFT,     KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,                              KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_MINUS, RSFT_T(KC_ENT), \
                                          KC_LALT,  KC_LGUI,   KC_SPC,  KC_ENT,         OSSFT,    LT_BSSYM, XXXXXXX,  KC_RALT \
     ),
+    [_GAME] = LAYOUT(
+        LT_NUMTAB,   KC_Q,     KC_W,     KC_E,     KC_R,      KC_T,                              KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_PLUS, \
+        KC_LCTL,     KC_A,     KC_S,     KC_D,     KC_F,      KC_G,                              KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT, \
+        KC_LSFT,     KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,                              KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_MINUS, RSFT_T(KC_ENT), \
+                                         KC_LALT,  KC_LGUI,   KC_SPC,  KC_ENT,         OSSFT,    LT_BSSYM, KC_ESC,   KC_RALT \
+    ),
     [_SYM] = LAYOUT(
         _______,     KC_CIRC,  KC_EXLM,  KC_DQUO,  KC_SLSH,   KC_BSLS,                           KC_GRV,   KC_LCBR,  KC_LBRC,  KC_RBRC,  KC_RCBR,  KC_ASTR,
         _______,     KC_HOME,  KC_DLR,   KC_LPRN,  KC_RPRN,   KC_END,                            KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_AMPR,  KC_PERC,
@@ -68,9 +74,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                          _______,  _______,   _______, _______,        KC_0,     KC_0,     _______,  _______ \
     ),
     [_FUN] = LAYOUT(
-        _______,     KC_F1,    KC_F2,    KC_F3,    KC_F4,     KC_F5,                             KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   _______, \
+        _______,     KC_F1,    KC_F2,    KC_F3,    KC_F4,     KC_F5,                             KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   DF(_BASE), \
         _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  KC_F11,   KC_F12,   _______, \
-        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  KC_INS,   KC_PSCR,  KC_SLCK,  KC_PAUSE, _______, \
+        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  KC_INS,   KC_PSCR,  KC_SLCK,  KC_PAUSE, DF(_GAME), \
                                          _______,  _______,   _______, _______,        _______,  _______,  _______,  _______ \
     ),
     [_MOUSE] = LAYOUT(
