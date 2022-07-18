@@ -17,7 +17,7 @@
 #include QMK_KEYBOARD_H
 #include <math.h>
 
-enum my_keycodes { SNIPE = SAFE_RANGE };
+enum my_keycodes { SNIPE = SAFE_RANGE, DRAG_SCRL };
 
 enum layer_names { _BASE = 0, _GAME, _SYM, _NUM, _FUN, _MOUSE };
 
@@ -80,9 +80,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                          _______,  _______,   _______, _______,        _______,  _______,  _______,  _______ \
     ),
     [_MOUSE] = LAYOUT(
-        _______,     _______,  _______,  _______,  _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
-        _______,     _______,  _______,  SNIPE,    _______,   _______,                           _______,  _______,  _______,  _______,  _______,  _______, \
-        _______,     _______,  _______,  _______,  _______,   KC_BTN3,                           _______,  _______,  _______,  _______,  _______,  _______, \
+        _______,     _______,  _______,  _______,  _______,   _______,                           KC_BTN2,  _______,  _______,  _______,  _______,  _______, \
+        _______,     _______,  _______,  SNIPE,    DRAG_SCRL, _______,                           KC_BTN2,  DRAG_SCRL,_______,  _______,  _______,  _______, \
+        _______,     _______,  _______,  _______,  _______,   KC_BTN3,                           KC_BTN3,  _______,  _______,  _______,  _______,  _______, \
                                          _______,  _______,   KC_BTN2, KC_BTN1,        KC_BTN1,  KC_BTN2,  KC_BTN3,  _______ \
     )
 
@@ -107,8 +107,25 @@ report_mouse_t rotate_mouse_report(report_mouse_t report) {
 
 
 static uint16_t mouse_layer_timer = 0;
+static bool drag_scroll = false;
 
 report_mouse_t pointing_device_task_user(report_mouse_t report) {
+
+    /*pinnacle_data_t touchdata = cirque_pinnacle_read_data();*/
+    /*if (touchdata.touchDown && !layer_state_is(_MOUSE)) {*/
+        /*layer_on(_MOUSE);*/
+    /*} else if(layer_state_is(_MOUSE)) {*/
+        /*layer_off(_MOUSE);*/
+    /*}*/
+
+    if (drag_scroll) {
+        report.h = report.x / 10;
+        report.v = report.y / 10;
+        report.x = 0;
+        report.y = 0;
+        return report;
+    }
+
     if (report.x != 0 && report.y != 0) {
         mouse_layer_timer = timer_read();
         if (!layer_state_is(_MOUSE)) {
@@ -117,6 +134,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t report) {
     } else if (timer_elapsed(mouse_layer_timer) > MOUSE_LAYER_TIMEOUT && layer_state_is(_MOUSE)) {
         layer_off(_MOUSE);
     }
+
     return rotate_mouse_report(report);
 }
 
@@ -127,15 +145,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         mouse_layer_timer += MOUSE_LAYER_TIMEOUT;
         layer_off(_MOUSE);
     }
+
+    drag_scroll = false;
+
     switch (keycode) {
         case SNIPE:
-            if (record->event.pressed) {
-                pointing_device_set_cpi(200);
-            } else {
-                pointing_device_set_cpi(400);
-            }
-            return true;
+            pointing_device_set_cpi(record->event.pressed ? 200 : 400);
+            return false;
+        case DRAG_SCRL:
+            drag_scroll = record->event.pressed;
+            return false;
         default:
             return true;
     }
+
 }
