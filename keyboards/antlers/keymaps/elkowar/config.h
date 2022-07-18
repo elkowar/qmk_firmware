@@ -17,3 +17,8 @@
 //#define CIRQUE_PINNACLE_TAP_ENABLE
 
 //#define MOUSE_EXTENDED_REPORT
+
+//#define WS2812_PIO_USE_PIO1
+//#define RGB_DI_PIN GP25
+//#define RGBLED_NUM 1
+

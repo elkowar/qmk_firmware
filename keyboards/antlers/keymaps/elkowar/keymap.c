@@ -16,6 +16,7 @@
 
 #include QMK_KEYBOARD_H
 #include <math.h>
+#include "print.h"
 
 enum my_keycodes { SNIPE = SAFE_RANGE, DRAG_SCRL };
 
@@ -87,37 +88,45 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 
 };
+// clang-format on
+
+void keyboard_post_init_user(void) {
+    debug_enable = true;
+}
 
 #define MOUSE_LAYER_TIMEOUT 650
 #define MOUSE_ROTATION_DEG 30
-
+#define MOUSE_CPI 400
 
 void pointing_device_init_user(void) {
-    pointing_device_set_cpi(400);
+    pointing_device_set_cpi(MOUSE_CPI);
 }
-
 
 report_mouse_t rotate_mouse_report(report_mouse_t report) {
     float rotation = MOUSE_ROTATION_DEG * 0.017453;
-    report.x = report.x * cos(rotation) - report.y * sin(rotation);
-    report.y = report.x * sin(rotation) + report.y * cos(rotation);
+    report.x       = report.x * cos(rotation) - report.y * sin(rotation);
+    report.y       = report.x * sin(rotation) + report.y * cos(rotation);
     return report;
 }
 
-
+void reset_mouse_report_motion(void) {
+    report_mouse_t report = pointing_device_get_report();
+    report.x              = 0;
+    report.y              = 0;
+    pointing_device_set_report(report);
+}
 
 static uint16_t mouse_layer_timer = 0;
-static bool drag_scroll = false;
+static bool     drag_scroll       = false;
+static bool     sniping_mode      = false;
 
 report_mouse_t pointing_device_task_user(report_mouse_t report) {
+    report = rotate_mouse_report(report);
 
-    /*pinnacle_data_t touchdata = cirque_pinnacle_read_data();*/
-    /*if (touchdata.touchDown && !layer_state_is(_MOUSE)) {*/
-        /*layer_on(_MOUSE);*/
-    /*} else if(layer_state_is(_MOUSE)) {*/
-        /*layer_off(_MOUSE);*/
-    /*}*/
-
+    if (sniping_mode) {
+        report.x = report.x / 2;
+        report.y = report.y / 2;
+    }
     if (drag_scroll) {
         report.h = report.x / 10;
         report.v = report.y / 10;
@@ -126,6 +135,7 @@ report_mouse_t pointing_device_task_user(report_mouse_t report) {
         return report;
     }
 
+    // if mouse is moving, reset mouse layer timer
     if (report.x != 0 && report.y != 0) {
         mouse_layer_timer = timer_read();
         if (!layer_state_is(_MOUSE)) {
@@ -135,28 +145,34 @@ report_mouse_t pointing_device_task_user(report_mouse_t report) {
         layer_off(_MOUSE);
     }
 
-    return rotate_mouse_report(report);
+#ifdef CONSOLE_ENABLE
+    pinnacle_data_t cirque_data = cirque_pinnacle_read_data();
+    if (cirque_data.valid) {
+        uprintf("trackpad: %d %d\n", cirque_data.touchDown, cirque_data.zValue);
+    }
+#endif
+
+    return report;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (keycode == KC_BTN1 || keycode == KC_BTN2 || keycode == KC_BTN3) {
+    if (keycode == KC_BTN1 || keycode == KC_BTN2 || keycode == KC_BTN3 || keycode == DRAG_SCRL) {
         mouse_layer_timer = timer_read();
     } else if (layer_state_is(_MOUSE)) {
         mouse_layer_timer += MOUSE_LAYER_TIMEOUT;
         layer_off(_MOUSE);
     }
 
-    drag_scroll = false;
-
     switch (keycode) {
         case SNIPE:
-            pointing_device_set_cpi(record->event.pressed ? 200 : 400);
+            reset_mouse_report_motion();
+            sniping_mode = record->event.pressed;
             return false;
         case DRAG_SCRL:
+            reset_mouse_report_motion();
             drag_scroll = record->event.pressed;
             return false;
         default:
             return true;
     }
-
 }
