@@ -27,6 +27,7 @@ enum layer_names { _BASE = 0, _GAME, _SYM, _NUM, _FUN, _MOUSE };
 
 #define OSSFT OSM(MOD_LSFT)
 #define LT_BSSYM LT(_SYM, KC_BSPC)
+#define LT_RETSYM LT(_SYM, KC_ENT)
 #define LT_NUMTAB LT(_NUM, KC_TAB)
 
 #define HOME_A KC_A
@@ -54,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         LT_NUMTAB,   KC_Q,     KC_W,     KC_E,     KC_R,      KC_T,                              KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_PLUS, \
         CT(KC_ESC),  HOME_A,   HOME_S,   HOME_D,   HOME_F,    KC_G,                              KC_H,     HOME_J,   HOME_K,   HOME_L,   HOME_SCLN,KC_QUOT, \
         KC_LSFT,     KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,                              KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_MINUS, RSFT_T(KC_ENT), \
-                                         KC_LALT,  KC_LGUI,   KC_SPC,  KC_ENT,         OSSFT,    LT_BSSYM, XXXXXXX,  KC_RALT \
+                                         KC_LALT,  KC_LGUI,   KC_SPC,  LT_RETSYM,      OSSFT,    LT_BSSYM, XXXXXXX,  KC_RALT \
     ),
     [_GAME] = LAYOUT(
         LT_NUMTAB,   KC_Q,     KC_W,     KC_E,     KC_R,      KC_T,                              KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_PLUS, \
@@ -81,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                          _______,  _______,   _______, _______,        _______,  _______,  _______,  _______ \
     ),
     [_MOUSE] = LAYOUT(
-        _______,     _______,  _______,  _______,  _______,   _______,                           KC_BTN2,  _______,  _______,  _______,  _______,  _______, \
+        _______,     _______,  _______,  _______,  _______,   _______,                           SNIPE,    _______,  _______,  _______,  _______,  _______, \
         _______,     _______,  _______,  SNIPE,    DRAG_SCRL, _______,                           KC_BTN2,  DRAG_SCRL,_______,  _______,  _______,  _______, \
         _______,     _______,  _______,  _______,  _______,   KC_BTN3,                           KC_BTN3,  _______,  _______,  _______,  _______,  _______, \
                                          _______,  _______,   KC_BTN2, KC_BTN1,        KC_BTN1,  KC_BTN2,  KC_BTN3,  _______ \
@@ -96,7 +97,7 @@ void keyboard_post_init_user(void) {
 
 #define MOUSE_LAYER_TIMEOUT 650
 #define MOUSE_ROTATION_DEG 30
-#define MOUSE_CPI 300
+#define MOUSE_CPI 350
 
 void pointing_device_init_user(void) {
     pointing_device_set_cpi(MOUSE_CPI);
