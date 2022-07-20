@@ -70,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_NUM] = LAYOUT(
         _______,     _______,  _______,  _______,  _______,   _______,                           _______,  KC_7,     KC_8,     KC_9,     KC_COMMA, KC_PLUS, \
-        _______,     KC_LSFT,  KC_LGUI,  KC_LCTL,  _______,   _______,                           _______,  KC_1,     KC_2,     KC_3,     KC_DOT,   _______, \
+        _______,     KC_LCTL,  KC_LSFT,  KC_LGUI,  _______,   _______,                           _______,  KC_1,     KC_2,     KC_3,     KC_DOT,   _______, \
         _______,     _______,  _______,  _______,  _______,   _______,                           _______,  KC_4,     KC_5,     KC_6,     KC_MINUS, _______, \
                                          _______,  _______,   _______, _______,        KC_0,     KC_0,     _______,  _______ \
     ),
@@ -96,7 +96,7 @@ void keyboard_post_init_user(void) {
 
 #define MOUSE_LAYER_TIMEOUT 650
 #define MOUSE_ROTATION_DEG 30
-#define MOUSE_CPI 400
+#define MOUSE_CPI 300
 
 void pointing_device_init_user(void) {
     pointing_device_set_cpi(MOUSE_CPI);
@@ -135,8 +135,9 @@ report_mouse_t pointing_device_task_user(report_mouse_t report) {
         return report;
     }
 
+    pinnacle_data_t cirque_data = cirque_pinnacle_last_valid_data();
     // if mouse is moving, reset mouse layer timer
-    if (report.x != 0 && report.y != 0) {
+    if (cirque_data.touchDown) {
         mouse_layer_timer = timer_read();
         if (!layer_state_is(_MOUSE)) {
             layer_on(_MOUSE);
@@ -146,10 +147,9 @@ report_mouse_t pointing_device_task_user(report_mouse_t report) {
     }
 
 #ifdef CONSOLE_ENABLE
-    pinnacle_data_t cirque_data = cirque_pinnacle_read_data();
-    if (cirque_data.valid) {
-        uprintf("trackpad: %d %d\n", cirque_data.touchDown, cirque_data.zValue);
-    }
+    /*if (cirque_data.valid) {*/
+    /*uprintf("trackpad: [%d] %d %d - %d (%d) :::: %d %d \n", cirque_data.valid, cirque_data.xValue, cirque_data.yValue, cirque_data.zValue, cirque_data.touchDown, report.x, report.y);*/
+    /*}*/
 #endif
 
     return report;

@@ -115,3 +115,5 @@ pinnacle_data_t cirque_pinnacle_read_data(void);
 void            cirque_pinnacle_scale_data(pinnacle_data_t* coordinates, uint16_t xResolution, uint16_t yResolution);
 uint16_t        cirque_pinnacle_get_scale(void);
 void            cirque_pinnacle_set_scale(uint16_t scale);
+
+pinnacle_data_t cirque_pinnacle_last_valid_data(void);

@@ -284,6 +284,8 @@ void cirque_pinnacle_init(void) {
     cirque_pinnacle_enable_feed(true);
 }
 
+static pinnacle_data_t last_pinnacle_data = {0};
+
 pinnacle_data_t cirque_pinnacle_read_data(void) {
     uint8_t         data_ready = 0;
     uint8_t         data[6]    = {0};
@@ -311,6 +313,8 @@ pinnacle_data_t cirque_pinnacle_read_data(void) {
     result.yValue      = data[3] | ((data[4] & 0xF0) << 4);          // merge high and low bits for Y
     result.zValue      = data[5] & 0x3F;                             // Z is only lower 6 bits, upper 2 bits are reserved/unused
     result.touchDown   = (result.xValue != 0 || result.yValue != 0); // (0,0) is a "magic coordinate" to indicate "finger touched down"
+
+    uprintf("AAA %d %d - %d (%d)\n", result.xValue, result.yValue, result.zValue, result.touchDown);
 #else
     // Decode data for relative mode
     // Registers 0x16 and 0x17 are unused in this mode
@@ -329,5 +333,10 @@ pinnacle_data_t cirque_pinnacle_read_data(void) {
 #endif
 
     result.valid = true;
+    last_pinnacle_data = result;
     return result;
+}
+
+pinnacle_data_t cirque_pinnacle_last_valid_data(void) {
+    return last_pinnacle_data;
 }
