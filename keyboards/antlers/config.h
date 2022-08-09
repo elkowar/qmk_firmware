@@ -21,15 +21,10 @@
 #define MATRIX_ROWS 8
 #define MATRIX_COLS 6
 
-// many things are specified in info.json
-
-#define UNUSED_PINS \
-    {}
 
 /* set to 0 if debouncing is not needed */
 #define DEBOUNCE 5
 
-#define QMK_KEYS_PER_SCAN 4
 #define USB_POLLING_INTERVAL_MS 1
 
 // enter bootloader mode via double-tapping reset (should be default)
