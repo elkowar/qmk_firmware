@@ -16,6 +16,7 @@ COMB(vert_exclmark,     KC_EXLM,       KC_O, KC_SCLN)
 
 COMB(caps_word,         CAPS_WORD,     KC_U, KC_I, KC_O)
 
+COMB(left_delete,       KC_DELETE,     KC_T, KC_G)
 
 //COMB(ctrl_z,             LC(Z))
 //COMB(ctrl_c,             LC(C))
@@ -25,7 +26,8 @@ SUBS(DBL_CLN, "::", KC_H, HOME_J)
 SUBS(ARROW, "->", KC_H, KC_U)
 SUBS(thin_arrow, "=>", KC_Y, KC_P)
 
-SUBS(UML_AE, SS_TAP(X_RALT)"\"a", HOME_A, HOME_S, HOME_D)
-SUBS(UML_OE, SS_TAP(X_RALT)"\"o", KC_K,   HOME_L, KC_SCLN)
-SUBS(UML_UE, SS_TAP(X_RALT)"\"u", KC_I,   KC_O,   KC_P)
+// these 3 are handled in inject.h because of capital letters
+SUBS(UML_AE, KC_NO, HOME_A, HOME_S, HOME_D)
+SUBS(UML_OE, KC_NO, KC_K,   HOME_L, KC_SCLN)
+SUBS(UML_UE, KC_NO, KC_I,   KC_O,   KC_P)
 SUBS(UML_SS, SS_TAP(X_RALT)"ss",  HOME_S, HOME_D, HOME_F)
